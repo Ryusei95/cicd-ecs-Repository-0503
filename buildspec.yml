@@ -38,8 +38,12 @@ phases:
       # 生成 ECS 用的 imageDefinitions.json 文件
       - printf '[{"name":"mynginx","imageUri":"%s"}]' \
         148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG > imageDefinitions.json
+      - echo "==== imageDefinitions.json 内容 ===="
+      - cat imageDefinitions.json
+      - echo "==== 当前目录下的文件列表 ===="
+      - ls -lh
 
 artifacts:
   files:
     - imageDefinitions.json
-    - imageTag.txt                              # 可选，调试时有用
+    - imageTag.txt
