@@ -4,6 +4,8 @@ phases:
   install:
     runtime-versions:
       nodejs: 16
+    commands:
+      - npm install -g jq
 
   pre_build:
     commands:
@@ -24,13 +26,11 @@ phases:
     commands:
       - echo Build completed on `date`
       - TAG=$(cat imageTag.txt)
-      - echo '{}' | jq --arg name "mynginx" --arg uri "148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG" '[{name: $name, imageUri: $uri}]' > imageDefinitions.json
+      - |
+        jq -n --arg name "mynginx" --arg uri "148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG" \
+        '[{name: $name, imageUri: $uri}]' > imageDefinitions.json
       - echo "==== imageDefinitions.json 内容 ===="
       - cat imageDefinitions.json
-      - echo "==== 查看是否存在隐藏字符 ===="
-      - od -c imageDefinitions.json
-      - echo "==== 当前目录下的文件列表 ===="
-      - ls -lh
 
 artifacts:
   files:
