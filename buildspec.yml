@@ -15,12 +15,8 @@ phases:
       - echo Build started on `date`
       - npm install
       - npm run build
-
-      # 生成 TAG 并保存
       - TAG=`date +%Y%m%d%H%M%S`
       - echo $TAG > imageTag.txt
-
-      # 构建镜像并推送
       - docker build -t 148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG .
       - docker push 148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG
 
@@ -28,11 +24,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - TAG=$(cat imageTag.txt)
-
-      # 使用 jq 安全生成 imageDefinitions.json
       - echo '{}' | jq --arg name "mynginx" --arg uri "148097737392.dkr.ecr.ap-northeast-1.amazonaws.com/my-ecr-2025:$TAG" '[{name: $name, imageUri: $uri}]' > imageDefinitions.json
-
-      # 调试输出
       - echo "==== imageDefinitions.json 内容 ===="
       - cat imageDefinitions.json
       - echo "==== 查看是否存在隐藏字符 ===="
